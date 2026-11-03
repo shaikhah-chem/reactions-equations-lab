@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الواقع المعزز – مستويات الطاقة والإلكترونات</title>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+<style>
+:root{--teal:#159C94;--teal-d:#0E7C76;--navy:#1F3A5F;--orange:#E07A3F;--cream:#FFF8E1;--bg:#F7F6F1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--navy);display:flex;flex-direction:column;
+  background-image:radial-gradient(circle at 8% 12%,#dff1ef 0,transparent 30%),radial-gradient(circle at 92% 90%,#e3eef9 0,transparent 30%)}
+.en{direction:ltr;unicode-bidi:isolate;font-family:Calibri,"Segoe UI",Arial,sans-serif}
+sup{font-size:.62em}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 4px;flex-wrap:wrap}
+.banner{background:#F4B183;color:#fff;font-weight:800;font-size:clamp(20px,3vw,34px);padding:6px 26px;border-radius:40px;box-shadow:0 3px 0 #e59a63}
+.chip{background:#fff;border:1px solid #ddd;border-radius:30px;padding:5px 14px;font-size:14px;font-weight:700}
+.wrap{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:8px 16px 16px;min-height:0}
+model-viewer{width:100%;height:100%;min-height:58vh;background:radial-gradient(circle,#ffffff 0,#eef5f4 70%);border-radius:24px;border:2px solid #cfe5e2;--poster-color:transparent}
+.ar-btn{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);border:0;cursor:pointer;font:inherit;font-weight:800;font-size:20px;color:#fff;
+  background:var(--teal);padding:12px 30px;border-radius:40px;box-shadow:0 4px 0 var(--teal-d)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:20px;color:var(--teal)}
+.panel{display:flex;flex-direction:column;gap:12px;min-height:0}
+.atoms{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.atoms button{font:inherit;font-weight:800;font-size:20px;padding:10px 0;border-radius:14px;border:2px solid #cfd8dc;background:#fff;color:var(--navy);cursor:pointer}
+.atoms button.on{background:var(--teal);border-color:var(--teal-d);color:#fff}
+.card{background:#fff;border:2px solid var(--teal);border-radius:20px;padding:14px 16px}
+.card h2{font-size:24px;display:flex;justify-content:space-between;align-items:center}
+.card h2 .sym{font-size:34px;color:var(--teal)}
+.row{margin-top:10px;font-size:18px;font-weight:700}
+.shells{display:flex;gap:6px;flex-direction:row-reverse;justify-content:flex-end;margin-top:6px;direction:ltr}
+.shells span{flex:1;text-align:center;border-radius:12px;padding:6px 0;color:#fff;font-weight:800;font-size:18px}
+.cfg{margin-top:8px;background:#E8F5F3;border-radius:12px;padding:10px;font-size:22px;font-weight:800;text-align:center}
+.hide-ans .ans{filter:blur(9px);user-select:none}
+.toggle{font:inherit;font-weight:800;font-size:17px;border:2px dashed #C00000;color:#C00000;background:#FDECEC;border-radius:14px;padding:8px;cursor:pointer}
+.legend{font-size:14px;color:#5b6b7f;line-height:1.8}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:5px;vertical-align:middle}
+footer{position:fixed;left:10px;bottom:4px;font-size:11px;color:#8a97a6}
+@media (max-width:820px){.wrap{grid-template-columns:1fr}model-viewer{min-height:52vh}}
+</style>
+</head>
+<body>
+<header>
+  <span class="chip">👩‍🏫 عرض المعلمة | ⏱ 1 د</span>
+  <div class="banner">الواقع المعزز ⚛</div>
+</header>
+<div class="wrap">
+  <div style="position:relative;min-height:0">
+    <model-viewer id="mv" camera-controls touch-action="pan-y" autoplay shadow-intensity="0.6" exposure="1.05"
+      ar ar-modes="webxr quick-look" ar-scale="auto" camera-orbit="25deg 70deg auto" interaction-prompt="none" alt="نموذج ذرة ثلاثي الأبعاد">
+      <button slot="ar-button" class="ar-btn">📱 اعرضيها في الفصل (الواقع المعزز)</button>
+    </model-viewer>
+    <div class="loading" id="loading">… جارٍ بناء الذرة</div>
+  </div>
+  <aside class="panel">
+    <div class="atoms" id="atoms"></div>
+    <div class="card hide-ans" id="card">
+      <h2><span id="nm"></span><span class="sym en" id="sym"></span></h2>
+      <div class="row">العدد الذري: <span class="en" id="z"></span> <span id="chg"></span></div>
+      <div class="row">الإلكترونات في المستويات <span class="en">(n = 1 , 2 , 3 , 4)</span>:</div>
+      <div class="shells ans" id="shells"></div>
+      <div class="row">التوزيع الإلكتروني:</div>
+      <div class="cfg en ans" id="cfg"></div>
+    </div>
+    <button class="toggle" id="tg">؟ اضغطي لكشف الإجابة</button>
+    <div class="legend"><i style="background:#d9534f"></i>بروتون &nbsp; <i style="background:#a6a6a6"></i>نيوترون &nbsp; <i style="background:#4fa3ff"></i>إلكترون<br>
+      لفّي النموذج بالإصبع أو الفأرة، وكبّريه بإصبعين.</div>
+  </aside>
+</div>
+<footer>تنفيذ المعلمة: أ. شيخه المطيري</footer>
+
+<script type="module">
+import { ATOMS, buildAtomGLB } from './models.js';
+const COL = ['#E07A3F', '#2E8B8B', '#2F5597', '#7030A0'];
+const $ = id => document.getElementById(id);
+const mv = $('mv'), cache = {};
+let cur = null;
+
+$('atoms').innerHTML = Object.entries(ATOMS).map(([k, a]) => `<button data-k="${k}" class="en">${a.sym}</button>`).join('');
+$('atoms').querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.k));
+
+async function show(k) {
+  if (k === cur) return; cur = k;
+  const a = ATOMS[k];
+  $('atoms').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
+  $('nm').textContent = a.name; $('sym').innerHTML = a.sym; $('z').textContent = a.z;
+  $('chg').innerHTML = a.charge ? `— الشحنة <span class="en">${a.charge}</span> ⟵ عدد الإلكترونات <span class="en">${a.shells.reduce((x, y) => x + y)}</span>` : '';
+  $('shells').innerHTML = a.shells.map((n, i) => `<span style="background:${COL[i]}">${n}</span>`).join('');
+  $('cfg').innerHTML = a.cfg;
+  $('card').classList.add('hide-ans'); $('tg').textContent = '؟ اضغطي لكشف الإجابة';
+  $('loading').style.display = 'grid';
+  try {
+    cache[k] = cache[k] || await buildAtomGLB(k);
+    if (cur === k) mv.src = cache[k];
+  } catch (e) { $('loading').textContent = 'تعذّر بناء النموذج'; console.error(e); return; }
+}
+mv.addEventListener('load', () => { $('loading').style.display = 'none'; mv.play(); });
+$('tg').onclick = () => {
+  const h = $('card').classList.toggle('hide-ans');
+  $('tg').textContent = h ? '؟ اضغطي لكشف الإجابة' : '🙈 إخفاء الإجابة';
+};
+const start = new URLSearchParams(location.search).get('atom');
+show(ATOMS[start] ? start : 'Cl');
+</script>
+</body>
+</html>
