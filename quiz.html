@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>التقويم الختامي – التفاعلات والمعادلات</title>
+<style>
+:root{
+  --teal:#159C94; --teal-d:#0E7C76; --navy:#1F3A5F; --orange:#E07A3F; --cream:#FFF8E1;
+  --green:#548235; --green-l:#E2F0D9; --red:#C00000; --red-l:#FDECEC; --bg:#F7F6F1;
+  --a1:#2E8B8B; --a2:#E07A3F; --a3:#2F5597; --a4:#7030A0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"Segoe UI","Tahoma","Arial",sans-serif; background:var(--bg); color:var(--navy);
+  background-image:radial-gradient(circle at 8% 12%,#dff1ef 0,transparent 28%),radial-gradient(circle at 92% 88%,#e3eef9 0,transparent 30%);
+  display:flex; flex-direction:column; min-height:100vh; overflow-x:hidden;
+}
+.en{direction:ltr;unicode-bidi:isolate;font-family:Calibri,"Segoe UI",Arial,sans-serif}
+sub,sup{font-size:.62em}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 3vw 6px}
+.banner{background:#F4B183;color:#fff;font-weight:800;font-size:clamp(22px,3vw,40px);padding:8px 34px;border-radius:40px;
+  box-shadow:0 3px 0 #e59a63;text-shadow:0 1px 2px rgba(122,62,20,.45);white-space:nowrap}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:#fff;border:1px solid #ddd;border-radius:30px;padding:6px 16px;font-size:clamp(14px,1.4vw,18px);font-weight:700}
+.tag{background:var(--green);color:#fff;border-radius:30px;padding:4px 14px;font-size:clamp(13px,1.2vw,16px);font-weight:700}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:10px 3vw 24px;gap:2.2vh}
+.hidden{display:none!important}
+/* start */
+.start{text-align:center;display:flex;flex-direction:column;align-items:center;gap:3vh}
+.start h1{font-size:clamp(30px,4.4vw,60px);color:var(--red)}
+.rules{background:#fff;border:2px solid var(--teal);border-radius:24px;padding:24px 34px;max-width:900px;text-align:right}
+.rules li{list-style:none;font-size:clamp(18px,2vw,28px);font-weight:700;margin:12px 0;display:flex;gap:14px;align-items:center}
+.rules li b{flex:none;width:42px;height:42px;border-radius:50%;color:#fff;display:grid;place-items:center;font-size:22px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:800;font-size:clamp(20px,2.2vw,30px);color:#fff;background:var(--teal);
+  padding:14px 46px;border-radius:50px;box-shadow:0 5px 0 var(--teal-d);transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--teal-d)}
+.btn.orange{background:var(--orange);box-shadow:0 5px 0 #b85f2c}
+/* question */
+.top{display:flex;align-items:center;gap:20px}
+.progress{flex:1;display:flex;gap:10px}
+.progress span{flex:1;height:12px;border-radius:8px;background:#dde5e4}
+.progress span.ok{background:var(--green)} .progress span.no{background:var(--red)} .progress span.cur{background:var(--orange)}
+.counter{font-weight:800;font-size:clamp(18px,1.8vw,26px);white-space:nowrap}
+.timer{position:relative;width:clamp(78px,8vw,110px);height:clamp(78px,8vw,110px);flex:none}
+.timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:10}
+.timer .bg{stroke:#e2e8e8} .timer .fg{stroke:var(--teal);stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s}
+.timer .num{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(28px,3vw,42px);font-weight:900}
+.timer.low .fg{stroke:var(--red)} .timer.low .num{color:var(--red)}
+.qbox{background:#E8F5F3;border:2px solid var(--teal);border-radius:24px;padding:3.2vh 2.4vw;font-size:clamp(24px,3vw,44px);font-weight:800;line-height:1.6;position:relative}
+.qbox .tag{position:absolute;top:-16px;left:24px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:2.2vh 2vw}
+.opt{display:flex;align-items:center;gap:18px;background:#fff;border:2px solid #cfcfcf;border-radius:22px;padding:2vh 1.4vw;cursor:pointer;
+  font:inherit;font-size:clamp(22px,2.6vw,38px);font-weight:800;color:var(--navy);text-align:right;transition:transform .12s,background .2s,border-color .2s}
+.opt:hover{transform:translateY(-3px);border-color:var(--teal)}
+.opt .l{flex:none;width:clamp(46px,4.6vw,66px);height:clamp(46px,4.6vw,66px);border-radius:50%;color:#fff;display:grid;place-items:center;font-size:.9em}
+.opt .t{flex:1;text-align:center}
+.opt.right{background:var(--green);border-color:#385723;color:#fff;animation:pop .45s}
+.opt.wrong{background:var(--red);border-color:#7f0000;color:#fff;animation:shake .45s}
+.opt.dim{opacity:.45}
+.opts.locked .opt{cursor:default}.opts.locked .opt:hover{transform:none}
+@keyframes pop{50%{transform:scale(1.05)}}
+@keyframes shake{20%,60%{transform:translateX(8px)}40%,80%{transform:translateX(-8px)}}
+.feedback{min-height:2.2em;border-radius:18px;padding:1.4vh 1.6vw;font-size:clamp(20px,2.1vw,30px);font-weight:700;display:flex;align-items:center;gap:14px;justify-content:space-between}
+.feedback.ok{background:var(--green-l);border:2px solid var(--green)} .feedback.no{background:var(--red-l);border:2px solid var(--red)}
+.feedback.time{background:var(--cream);border:2px solid #F2B705}
+/* result */
+.result{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2.6vh}
+.score{font-size:clamp(70px,10vw,150px);font-weight:900;color:var(--teal)}
+.list{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:min(1000px,100%)}
+.list div{background:#fff;border-radius:18px;padding:16px 8px;border:2px solid #ddd;font-size:clamp(18px,1.8vw,26px);font-weight:800}
+.list div.ok{border-color:var(--green);color:var(--green)} .list div.no{border-color:var(--red);color:var(--red)}
+.list div span{display:block;font-size:1.6em}
+.msg{font-size:clamp(22px,2.4vw,34px);font-weight:800}
+footer{position:fixed;left:10px;bottom:6px;font-size:11px;color:#8a97a6}
+.tools{position:fixed;right:12px;bottom:10px;display:flex;gap:8px}
+.tools button{border:1px solid #ccd;background:#fff;border-radius:20px;padding:6px 12px;cursor:pointer;font:inherit;font-size:14px;color:var(--navy)}
+@media (max-width:700px){.opts{grid-template-columns:1fr}.list{grid-template-columns:repeat(3,1fr)}header{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header>
+  <div class="chips"><span class="chip">👤 فردي</span><span class="chip">⏱ 10 ثوانٍ لكل سؤال</span></div>
+  <div class="banner">التقويم الختامي 🏆</div>
+</header>
+
+<main>
+  <!-- start screen -->
+  <section id="start" class="start">
+    <h1>هل أصبحتِ باحثة كيميائية؟ أثبتي فهمك!</h1>
+    <ul class="rules">
+      <li><b style="background:var(--a1)">1</b>خمسة أسئلة اختيار من متعدد بنمط التحصيلي.</li>
+      <li><b style="background:var(--a2)">2</b>فكّري وحدكِ 10 ثوانٍ، ثم ارفعي أصابعكِ برمز الإجابة (أ، ب، ج، د).</li>
+      <li><b style="background:var(--a3)">3</b>تضغط المعلمة إجابة الفصل… وتظهر التغذية الراجعة فوراً.</li>
+    </ul>
+    <button class="btn" id="go">ابدئي التقويم ◀</button>
+  </section>
+
+  <!-- question screen -->
+  <section id="quiz" class="hidden" style="display:flex;flex-direction:column;gap:2.4vh">
+    <div class="top">
+      <div class="counter" id="counter"></div>
+      <div class="progress" id="progress"></div>
+      <div class="timer" id="timer">
+        <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="arc" cx="60" cy="60" r="52"/></svg>
+        <div class="num" id="tnum">10</div>
+      </div>
+    </div>
+    <div class="qbox"><span class="tag">تحصيلي كيمياء</span><div id="q"></div></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb" style="visibility:hidden"><span id="fbt"></span><button class="btn orange" id="next">التالي ◀</button></div>
+  </section>
+
+  <!-- result screen -->
+  <section id="result" class="result hidden">
+    <div class="msg" id="rmsg"></div>
+    <div class="score en" id="score"></div>
+    <div class="list" id="rlist"></div>
+    <button class="btn" id="again">إعادة التقويم ↻</button>
+  </section>
+</main>
+
+<div class="tools"><button id="snd">🔊 الصوت</button><button id="fs">⛶ ملء الشاشة</button></div>
+<footer>تنفيذ المعلمة: أ. شيخه المطيري</footer>
+
+<script>
+// Formulas: <span class="en"> keeps Latin/maths left-to-right inside Arabic text.
+const cfg = s => `<span class="en">${s}</span>`;
+const Q = [
+  {q:'أيٌّ مما يلي <u>لا</u> يُعدّ دليلاً على حدوث تفاعل كيميائي؟',
+   o:['تصاعد غاز','تكوّن راسب','تغيّر اللون','ذوبان السكر في الماء'], a:3,
+   f:'ذوبان السكر تغيّر فيزيائي لا تتكوّن فيه مادة جديدة.'},
+  {q:'أي المستويات الثانوية التالية أقل في الطاقة؟',
+   o:[cfg('3d'),cfg('4s'),cfg('4p'),cfg('4f')], a:1,
+   f:`حسب مخطط الأسهم يُملأ ${cfg('4s')} قبل ${cfg('3d')} لأنه أقل طاقة.`},
+  {q:`ما عدد الإلكترونات التي يستوعبها المستوى الثانوي ${cfg('d')}؟`,
+   o:[cfg('2'),cfg('6'),cfg('10'),cfg('14')], a:2,
+   f:`المستوى ${cfg('d')} يستوعب ${cfg('10')} إلكترونات (${cfg('s = 2 , p = 6 , d = 10 , f = 14')}).`},
+  {q:`التوزيع الإلكتروني ${cfg('1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>1</sup> 3d<sup>5</sup>')} يمثّل عنصر:`,
+   o:[cfg('Cu'),cfg('Cr'),cfg('Fe'),cfg('Ni')], a:1,
+   f:`مجموع الإلكترونات ${cfg('24')} ⟵ الكروم، وهو من استثناءات التوزيع (${cfg('3d')} نصف ممتلئ).`},
+  {q:`ما التوزيع الإلكتروني لأيون الصوديوم ${cfg('Na<sup>+</sup>')} (العدد الذري ${cfg('11')})؟`,
+   o:[cfg('1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>1</sup>'),cfg('1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup>'),
+      cfg('1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup>'),cfg('1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>5</sup>')], a:1,
+   f:`يفقد الصوديوم إلكتروناً واحداً فيبقى ${cfg('11 − 1 = 10')} إلكترونات.`}
+];
+const L = ['أ','ب','ج','د'], COL = ['var(--a1)','var(--a2)','var(--a3)','var(--a4)'];
+const $ = id => document.getElementById(id);
+let i = 0, res = [], t = 10, tick = null, sound = true, ctx = null;
+
+function beep(f, d, type='sine', v=.15){
+  if(!sound) return;
+  try{
+    ctx = ctx || new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.value = f; g.gain.value = v;
+    o.connect(g); g.connect(ctx.destination); o.start();
+    g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + d); o.stop(ctx.currentTime + d);
+  }catch(e){}
+}
+const good = () => { beep(660,.15); setTimeout(()=>beep(880,.25),130); };
+const bad  = () => { beep(220,.35,'square',.08); };
+
+function show(id){ ['start','quiz','result'].forEach(s => $(s).classList.toggle('hidden', s !== id)); }
+
+function render(){
+  const it = Q[i];
+  $('counter').textContent = `سؤال ${i+1} من ${Q.length}`;
+  $('progress').innerHTML = Q.map((_,k)=>`<span class="${k<i?(res[k]?'ok':'no'):(k===i?'cur':'')}"></span>`).join('');
+  $('q').innerHTML = it.q;
+  $('opts').className = 'opts';
+  $('opts').innerHTML = it.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="l" style="background:${COL[k]}">${L[k]}</span><span class="t">${o}</span></button>`).join('');
+  $('opts').querySelectorAll('.opt').forEach(b => b.onclick = () => choose(+b.dataset.k));
+  $('fb').style.visibility = 'hidden'; $('fb').className = 'feedback';
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(tick); t = 10; drawTimer();
+  tick = setInterval(() => {
+    t--; drawTimer();
+    if(t <= 3 && t > 0) beep(990,.08,'sine',.08);
+    if(t <= 0){
+      clearInterval(tick); beep(440,.4,'triangle',.12);
+      $('fb').className = 'feedback time'; $('fbt').textContent = '⏰ انتهى الوقت! ارفعي إجابتكِ… والمعلمة تختار إجابة الفصل';
+      $('next').classList.add('hidden'); $('fb').style.visibility = 'visible';
+    }
+  }, 1000);
+}
+function drawTimer(){
+  const C = 2*Math.PI*52, arc = $('arc');
+  arc.style.strokeDasharray = C; arc.style.strokeDashoffset = C*(1 - t/10);
+  $('tnum').textContent = t; $('timer').classList.toggle('low', t <= 3);
+}
+
+function choose(k){
+  const box = $('opts'); if(box.classList.contains('locked')) return;
+  clearInterval(tick); box.classList.add('locked');
+  const it = Q[i], ok = k === it.a, btns = box.querySelectorAll('.opt');
+  btns.forEach((b,j) => { if(j === it.a) b.classList.add('right'); else if(j === k) b.classList.add('wrong'); else b.classList.add('dim'); });
+  res[i] = ok; ok ? good() : bad();
+  $('fb').className = 'feedback ' + (ok ? 'ok' : 'no');
+  $('fbt').innerHTML = (ok ? '✔ أحسنتنّ! ' : `✘ الإجابة الصحيحة (${L[it.a]}) — `) + it.f;
+  $('next').classList.remove('hidden');
+  $('next').textContent = i === Q.length-1 ? 'النتيجة 🏆' : 'التالي ◀';
+  $('fb').style.visibility = 'visible';
+}
+
+function next(){ if(i < Q.length-1){ i++; render(); } else finish(); }
+
+function finish(){
+  clearInterval(tick); show('result');
+  const s = res.filter(Boolean).length;
+  $('score').textContent = `${s} / ${Q.length}`;
+  $('rmsg').textContent = s === 5 ? '🌟 ممتاز! أصبحتِ باحثة كيميائية بامتياز' : s >= 3 ? '👏 أحسنتنّ! نتيجة رائعة' : '💪 نراجع معاً ونحاول مرة أخرى';
+  $('rlist').innerHTML = res.map((r,k)=>`<div class="${r?'ok':'no'}"><span>${r?'✔':'✘'}</span>سؤال ${k+1}</div>`).join('');
+  if(s >= 3){ good(); setTimeout(good,300); }
+}
+
+$('go').onclick = () => { i = 0; res = []; show('quiz'); render(); };
+$('next').onclick = next;
+$('again').onclick = () => { i = 0; res = []; show('quiz'); render(); };
+$('snd').onclick = () => { sound = !sound; $('snd').textContent = sound ? '🔊 الصوت' : '🔇 الصوت'; };
+$('fs').onclick = () => { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); };
+document.addEventListener('keydown', e => {
+  if(!$('quiz').classList.contains('hidden')){
+    const m = {'1':0,'2':1,'3':2,'4':3}; if(e.key in m) choose(m[e.key]);
+    if((e.key === 'Enter' || e.key === 'ArrowLeft') && $('opts').classList.contains('locked')) next();
+  }
+});
+</script>
+</body>
+</html>
